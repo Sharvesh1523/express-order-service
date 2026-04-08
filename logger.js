@@ -26,7 +26,7 @@ const logger = pino(
   {
     level: "info",
     base: {
-      service: "order-service",
+      service: "order-services",
     },
   },
   transport
