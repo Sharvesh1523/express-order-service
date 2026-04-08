@@ -5,6 +5,8 @@ const correlationId = require("./correlation");
 
 const app = express();
 app.use(express.json());
+
+// Add correlation ID to each request
 app.use(correlationId);
 
 // Attach a child logger with correlation ID
@@ -23,16 +25,14 @@ app.use(
       req: "request",
       res: "response",
       err: "error",
-    }
+    },
   })
 );
 
 // In-memory DB
 const orders = {};
 
-/**
- * Create an order
- */
+// Create an order
 app.post("/orders", (req, res) => {
   const { customer, items } = req.body;
 
@@ -50,14 +50,12 @@ app.post("/orders", (req, res) => {
     createdAt: new Date().toISOString(),
   };
 
-  req.log.info({ orderId: id, customer }, "order_created");
+  req.log.info({ orderId: id }, "order_created");
 
   res.status(201).json(orders[id]);
 });
 
-/**
- * Get order details
- */
+// Get order details
 app.get("/orders/:id", (req, res) => {
   const order = orders[req.params.id];
 
@@ -70,9 +68,7 @@ app.get("/orders/:id", (req, res) => {
   res.json(order);
 });
 
-/**
- * Update order status
- */
+// Update order status
 app.patch("/orders/:id", (req, res) => {
   const order = orders[req.params.id];
   const { status } = req.body;
@@ -93,9 +89,7 @@ app.patch("/orders/:id", (req, res) => {
   res.json(order);
 });
 
-/**
- * Simulated error
- */
+// Simulated error route
 app.get("/simulate-error", (req, res) => {
   try {
     throw new Error("Simulated internal failure");
@@ -105,10 +99,10 @@ app.get("/simulate-error", (req, res) => {
   }
 });
 
+// Root endpoint
 app.get("/", (req, res) => {
   res.send("Order Service is running.");
 });
 
-app.listen(3000, () => {
-  logger.info("Order service running at http://localhost:3000");
-});
+// Export app for testing and server.js
+module.exports = app;
