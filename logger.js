@@ -14,6 +14,7 @@ const transport = pino.transport({
     labels: {
       env: "development" 
     },
+    propsToLabels: ["service"],
     
     // Batching sends logs in chunks to avoid overwhelming the network
     batching: true,
