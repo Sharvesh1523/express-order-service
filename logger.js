@@ -15,7 +15,7 @@ const transport = pino.transport({
       env: "development" 
     },
     propsToLabels: ["service"],
-    
+    replaceTimestamp: true,
     // Batching sends logs in chunks to avoid overwhelming the network
     batching: true,
     interval: 5, 
@@ -25,7 +25,6 @@ const transport = pino.transport({
 const logger = pino(
   {
     level: "info",
-    timestamp: pino.stdTimeFunctions.isoTime,
     base: {
       service: "order-service",
     },
