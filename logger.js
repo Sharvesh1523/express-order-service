@@ -1,7 +1,7 @@
 const pino = require("pino");
 
 const transport = pino.transport({
-  target: "pino-loki",
+  target: require.resolve("pino-loki"),
   options: {
     host: "http://loki-gateway.loki.svc.cluster.local", 
     
